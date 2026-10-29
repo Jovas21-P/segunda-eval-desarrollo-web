@@ -1,0 +1,33 @@
+# Dependencias
+node_modules/
+vendor/
+
+# Archivos de entorno y secretos
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Base de datos local
+data/
+*.sqlite
+*.sqlite3
+*.db
+*.db-shm
+*.db-wal
+
+# Archivos de compilación y logs
+dist/
+build/
+coverage/
+*.log
+npm-debug.log*
+
+# IDEs y sistema operativo
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Cobertura de pruebas
+.nyc_output/

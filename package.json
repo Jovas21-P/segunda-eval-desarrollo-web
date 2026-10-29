@@ -1,0 +1,51 @@
+{
+  "name": "foodexpress-app",
+  "version": "1.0.0",
+  "description": "Plataforma de reservas y pedidos en línea FoodExpress",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "cross-env NODE_ENV=test jest --runInBand",
+    "test:watch": "cross-env NODE_ENV=test jest --watch",
+    "test:coverage": "cross-env NODE_ENV=test jest --coverage --runInBand",
+    "build:css": "tailwindcss -i ./src/styles/tailwind.css -o ./public/css/styles.css --minify",
+    "watch:css": "tailwindcss -i ./src/styles/tailwind.css -o ./public/css/styles.css --watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "db:reset": "node scripts/reset-db.js"
+  },
+  "keywords": [
+    "foodexpress",
+    "express",
+    "sqlite",
+    "jwt",
+    "tailwindcss",
+    "rest-api"
+  ],
+  "author": "FoodExpress Team",
+  "license": "MIT",
+  "type": "commonjs",
+  "private": true,
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^13.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.9",
+    "express": "^4.22.3",
+    "express-rate-limit": "^8.7.1",
+    "express-validator": "^7.3.2",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "cross-env": "^10.1.0",
+    "eslint": "^10.13.0",
+    "globals": "^17.13.0",
+    "jest": "^30.5.2",
+    "nodemon": "^3.1.14",
+    "supertest": "^7.3.1",
+    "tailwindcss": "^3.4.19"
+  }
+}

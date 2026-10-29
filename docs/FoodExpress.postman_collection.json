@@ -1,0 +1,326 @@
+{
+  "info": {
+    "_postman_id": "f00dexp-0000-4000-8000-000000000001",
+    "name": "FoodExpress API",
+    "description": "Colección de pruebas de integración de la API FoodExpress. Ejecuta primero Login para guardar el token en la variable de colección.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api/v1"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Sistema",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/health"
+          }
+        },
+        {
+          "name": "Config",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/config"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Autenticación",
+      "item": [
+        {
+          "name": "Registrar usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Registro exitoso', () => {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "const data = pm.response.json();",
+                  "if (data.success) {",
+                  "  pm.collectionVariables.set('token', data.data.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ana Martínez\",\n  \"email\": \"ana@example.com\",\n  \"password\": \"Password123\",\n  \"phone\": \"55 1234 5678\",\n  \"address\": \"Av. Reforma 123, Col. Centro, CDMX\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/register"
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Login exitoso', () => {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "const data = pm.response.json();",
+                  "if (data.success) {",
+                  "  pm.collectionVariables.set('token', data.data.token);",
+                  "  pm.test('Token guardado', () => pm.expect(data.data.token).to.be.a('string'));",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@foodexpress.com\",\n  \"password\": \"Admin123!\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/login"
+          }
+        },
+        {
+          "name": "Perfil (me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/me"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Productos",
+      "item": [
+        {
+          "name": "Catálogo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/products"
+          }
+        },
+        {
+          "name": "Filtrar postres",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?category=Postres",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Postres"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar pizza",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?search=pizza",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "pizza"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Detalle producto",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/products/4"
+          }
+        },
+        {
+          "name": "Categorías",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/products/categories"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pedidos",
+      "item": [
+        {
+          "name": "Crear pedido (tarjeta)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Pedido creado', () => {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "const data = pm.response.json();",
+                  "if (data.success) {",
+                  "  pm.collectionVariables.set('orderId', data.data.order.id);",
+                  "  pm.test('Pago aprobado en modo mock', () => {",
+                  "    pm.expect(data.data.order.paymentStatus).to.eql('paid');",
+                  "  });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    { \"productId\": 4, \"quantity\": 2 },\n    { \"productId\": 11, \"quantity\": 1 }\n  ],\n  \"deliveryAddress\": \"Av. Reforma 123, Col. Centro, CDMX\",\n  \"paymentMethod\": \"card\",\n  \"notes\": \"Sin cebolla, por favor\",\n  \"location\": { \"lat\": 19.4326, \"lon\": -99.1332 }\n}"
+            },
+            "url": "{{baseUrl}}/orders"
+          }
+        },
+        {
+          "name": "Crear pedido (efectivo)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    { \"productId\": 7, \"quantity\": 1 }\n  ],\n  \"deliveryAddress\": \"Av. Reforma 123, Col. Centro, CDMX\",\n  \"paymentMethod\": \"cash\"\n}"
+            },
+            "url": "{{baseUrl}}/orders"
+          }
+        },
+        {
+          "name": "Historial del usuario",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/orders/user"
+          }
+        },
+        {
+          "name": "Detalle de pedido",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/orders/{{orderId}}"
+          }
+        },
+        {
+          "name": "Todos los pedidos (admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/orders"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Entrega",
+      "item": [
+        {
+          "name": "Clima y ETA",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/delivery/estimate?lat=19.4326&lon=-99.1332",
+              "host": ["{{baseUrl}}"],
+              "path": ["delivery", "estimate"],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": "19.4326"
+                },
+                {
+                  "key": "lon",
+                  "value": "-99.1332"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

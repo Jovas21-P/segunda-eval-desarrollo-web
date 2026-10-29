@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply min-h-screen bg-ink-950 bg-radial-brand font-sans text-slate-100 antialiased;
+  }
+
+  ::selection {
+    @apply bg-brand-500/40 text-white;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-500/70 ring-offset-2 ring-offset-ink-950;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-ink-950;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-ink-700;
+  }
+
+  dialog::backdrop {
+    background: rgba(3, 7, 12, 0.82);
+    backdrop-filter: blur(5px);
+  }
+
+  dialog[open] {
+    animation: fade-up 0.25s ease-out both;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand-500 px-5 py-3 text-sm font-semibold text-white shadow-glow transition duration-200 hover:-translate-y-0.5 hover:bg-brand-400 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-slate-100 transition duration-200 hover:border-white/30 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white;
+  }
+
+  .card {
+    @apply rounded-2xl border border-white/10 bg-ink-900/80 shadow-card backdrop-blur;
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 transition focus:border-brand-500/60 focus:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-brand-500/20;
+  }
+
+  .label {
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-400;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide;
+  }
+
+  .nav-link {
+    @apply rounded-lg px-3 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white;
+  }
+
+  .nav-link-active {
+    @apply bg-white/10 text-white;
+  }
+
+  .chip {
+    @apply inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-300 transition hover:border-white/25 hover:text-white;
+  }
+
+  .chip-active {
+    @apply border-brand-500/60 bg-brand-500/15 text-brand-200;
+  }
+
+  .skeleton {
+    @apply animate-pulse rounded-xl bg-white/[0.06];
+  }
+
+  .stat-value {
+    @apply text-2xl font-bold tracking-tight text-white sm:text-3xl;
+  }
+
+  .stat-label {
+    @apply mt-1 text-xs uppercase tracking-wider text-slate-500;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-brand-300 via-amber-200 to-brand-400 bg-clip-text text-transparent;
+  }
+
+  .glass {
+    @apply border border-white/10 bg-white/[0.04] backdrop-blur-xl;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .grid-mask {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse at center, black 35%, transparent 75%);
+  }
+}

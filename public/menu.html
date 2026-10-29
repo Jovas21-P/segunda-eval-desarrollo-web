@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#070b10" />
+    <meta name="description" content="Explora el menú de FoodExpress y arma tu pedido en línea." />
+    <title>Menú · FoodExpress</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%94%3C/text%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+
+  <body data-page="menu" class="min-h-screen">
+    <div id="app-header"></div>
+
+    <main class="container-page py-10">
+      <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-400">
+            Catálogo en línea
+          </p>
+          <h1 class="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">Nuestro menú</h1>
+          <p class="mt-2 max-w-2xl text-sm leading-relaxed text-slate-400">
+            Elige tus platillos favoritos, ajusta cantidades y confirma tu pedido en segundos.
+            El stock y los importes se validan en el servidor.
+          </p>
+        </div>
+
+        <label class="relative block w-full sm:max-w-xs">
+          <span class="sr-only">Buscar platillos</span>
+          <svg class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35M17 10.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0Z" />
+          </svg>
+          <input id="search-input" type="search" class="input !pl-10" placeholder="Buscar tacos, pizza, postres..." autocomplete="off" />
+        </label>
+      </div>
+
+      <div class="mt-8 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
+        <section aria-labelledby="products-heading">
+          <h2 id="products-heading" class="sr-only">Productos</h2>
+
+          <div id="category-filters" class="flex snap-x gap-2 overflow-x-auto pb-1 no-scrollbar" aria-label="Filtrar por categoría">
+            <span class="chip chip-active">Todos</span>
+          </div>
+
+          <div id="product-grid" class="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            <div class="skeleton h-72"></div>
+            <div class="skeleton h-72"></div>
+            <div class="skeleton h-72"></div>
+            <div class="skeleton h-72"></div>
+            <div class="skeleton h-72"></div>
+            <div class="skeleton h-72"></div>
+          </div>
+
+          <div id="empty-menu" class="hidden card mt-6 p-10 text-center">
+            <p class="text-4xl">🔎</p>
+            <h3 class="mt-3 text-base font-semibold">No encontramos platillos</h3>
+            <p class="mt-1 text-sm text-slate-400">Prueba con otra categoría o término de búsqueda.</p>
+          </div>
+        </section>
+
+        <aside
+          id="cart-panel"
+          class="fixed inset-y-0 right-0 z-50 flex w-full max-w-md translate-x-full flex-col border-l border-white/10 bg-ink-900/95 shadow-card backdrop-blur-xl transition-transform duration-300 lg:sticky lg:top-20 lg:z-0 lg:h-[calc(100vh-6rem)] lg:w-auto lg:max-w-none lg:translate-x-0 lg:rounded-2xl lg:border"
+          aria-label="Carrito de compras"
+        >
+          <div class="flex items-start justify-between gap-4 border-b border-white/10 p-5">
+            <div>
+              <h2 class="flex items-center gap-2 text-base font-semibold">
+                Tu pedido
+                <span id="cart-count-pill" class="badge border-brand-400/30 bg-brand-500/10 text-brand-300">0</span>
+              </h2>
+              <p id="cart-summary" class="mt-1 text-xs text-slate-400">Agrega platillos para comenzar.</p>
+            </div>
+            <button id="close-cart" type="button" class="btn-ghost !p-2 lg:hidden" aria-label="Cerrar carrito">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <div id="cart-items" class="flex-1 overflow-y-auto p-5">
+            <div class="grid h-full place-items-center text-center">
+              <div>
+                <p class="text-4xl">🛒</p>
+                <p class="mt-3 text-sm font-medium text-slate-300">Tu carrito está vacío</p>
+                <p class="mt-1 text-xs text-slate-500">Explora el menú y agrega tu primer platillo.</p>
+              </div>
+            </div>
+          </div>
+
+          <div id="cart-footer" class="hidden border-t border-white/10 p-5">
+            <div class="space-y-2 text-sm">
+              <div class="flex items-center justify-between text-slate-400">
+                <span>Subtotal</span>
+                <span id="cart-subtotal" class="text-slate-200">$0.00</span>
+              </div>
+              <div class="flex items-center justify-between text-slate-400">
+                <span>Envío</span>
+                <span id="cart-delivery" class="text-slate-200">$0.00</span>
+              </div>
+              <div class="flex items-center justify-between border-t border-white/10 pt-2 text-base font-bold">
+                <span>Total</span>
+                <span id="cart-total">$0.00</span>
+              </div>
+            </div>
+
+            <p id="free-delivery-note" class="mt-2 text-[11px] text-emerald-300"></p>
+
+            <form id="checkout-form" class="mt-5 space-y-4" novalidate>
+              <div>
+                <label for="delivery-address" class="label">Dirección de entrega</label>
+                <textarea id="delivery-address" rows="2" class="input resize-none" placeholder="Calle, número, colonia, referencias..." maxlength="250" required></textarea>
+              </div>
+
+              <div>
+                <label for="order-notes" class="label">Notas para la cocina (opcional)</label>
+                <input id="order-notes" type="text" class="input" placeholder="Sin cebolla, extra picante..." maxlength="300" />
+              </div>
+
+              <fieldset>
+                <legend class="label">Método de pago</legend>
+                <div class="grid gap-2">
+                  <label class="flex cursor-pointer items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm transition has-[:checked]:border-brand-500/60 has-[:checked]:bg-brand-500/10">
+                    <input type="radio" name="paymentMethod" value="card" class="h-4 w-4 accent-brand-500" checked />
+                    <span class="flex-1">
+                      <span class="block font-medium">Tarjeta · Stripe</span>
+                      <span class="mt-0.5 block text-[11px] text-slate-500">Pago seguro simulado o real</span>
+                    </span>
+                    <span class="text-lg">💳</span>
+                  </label>
+                  <label class="flex cursor-pointer items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm transition has-[:checked]:border-brand-500/60 has-[:checked]:bg-brand-500/10">
+                    <input type="radio" name="paymentMethod" value="cash" class="h-4 w-4 accent-brand-500" />
+                    <span class="flex-1">
+                      <span class="block font-medium">Efectivo al recibir</span>
+                      <span class="mt-0.5 block text-[11px] text-slate-500">Paga cuando llegue tu pedido</span>
+                    </span>
+                    <span class="text-lg">💵</span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <div>
+                <button id="locate-btn" type="button" class="btn-secondary w-full !py-2.5">
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                  </svg>
+                  Calcular entrega con mi ubicación
+                </button>
+                <p id="location-status" class="mt-2 text-[11px] leading-relaxed text-slate-500">
+                  Opcional: usa tu ubicación para ajustar el tiempo según el clima.
+                </p>
+              </div>
+
+              <div id="checkout-error" class="hidden rounded-xl border border-rose-400/30 bg-rose-500/10 px-4 py-3 text-xs text-rose-200" role="alert"></div>
+
+              <button id="checkout-btn" type="submit" class="btn-primary w-full">
+                Confirmar pedido
+              </button>
+              <p class="text-center text-[11px] text-slate-500">
+                🔒 Pago protegido. Precios y stock validados en el servidor.
+              </p>
+            </form>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <div id="cart-overlay" class="fixed inset-0 z-40 hidden bg-black/70 backdrop-blur-sm lg:hidden"></div>
+
+    <button
+      id="open-cart"
+      type="button"
+      class="fixed bottom-5 right-5 z-30 hidden items-center gap-3 rounded-2xl bg-brand-500 px-5 py-3.5 text-sm font-semibold text-white shadow-glow transition hover:bg-brand-400 lg:hidden"
+    >
+      <span class="relative">
+        🛒
+        <span id="mobile-cart-count" class="absolute -right-2 -top-2 min-w-[18px] rounded-full bg-ink-950 px-1 text-center text-[10px] font-bold leading-[18px]">0</span>
+      </span>
+      <span>Ver pedido</span>
+      <span id="mobile-cart-total" class="text-white/80">$0.00</span>
+    </button>
+
+    <dialog id="success-dialog" class="max-h-[90vh] w-[calc(100%-2rem)] max-w-md overflow-y-auto rounded-2xl border border-white/10 bg-ink-900 p-0 text-slate-100 shadow-card">
+      <div class="p-7 text-center">
+        <div class="mx-auto grid h-14 w-14 place-items-center rounded-full bg-emerald-500/15 text-emerald-300">
+          <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+          </svg>
+        </div>
+        <h2 class="mt-4 text-xl font-bold">¡Pedido confirmado!</h2>
+        <p id="success-subtitle" class="mt-1 text-sm text-slate-400">Tu comida está en preparación.</p>
+
+        <div class="mt-5 space-y-2 rounded-xl border border-white/10 bg-white/[0.03] p-4 text-left text-sm">
+          <div class="flex items-center justify-between">
+            <span class="text-slate-400">Pedido</span>
+            <span id="success-order" class="font-semibold">#—</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-400">Total</span>
+            <span id="success-total" class="font-semibold">$—</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-400">Entrega estimada</span>
+            <span id="success-eta" class="font-semibold">—</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-400">Estado</span>
+            <span id="success-status">—</span>
+          </div>
+        </div>
+
+        <div class="mt-6 grid gap-2 sm:grid-cols-2">
+          <a href="/orders.html" class="btn-secondary">Ver mis pedidos</a>
+          <button id="success-close" type="button" class="btn-primary">Seguir comprando</button>
+        </div>
+      </div>
+    </dialog>
+
+    <div id="app-footer"></div>
+    <div id="toast-root" class="pointer-events-none fixed inset-x-0 bottom-5 z-[70] flex flex-col items-center gap-2 px-4" aria-live="polite"></div>
+
+    <script src="/js/api.js" defer></script>
+    <script src="/js/session.js" defer></script>
+    <script src="/js/ui.js" defer></script>
+    <script src="/js/cart.js" defer></script>
+    <script src="/js/menu.js" defer></script>
+  </body>
+</html>
